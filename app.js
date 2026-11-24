@@ -177,6 +177,8 @@
       if (o.price) {
         body.appendChild(el('span', { 'class': 'price' }, o.price));
         if (o.priceSource) body.appendChild(el('small', {}, o.priceSource));
+      } else if (o.url && isMapsLink(o.url)) {
+        body.appendChild(el('small', {}, 'מחירים וזמינות יתעדכנו כשיענו לנו.'));
       } else {
         body.appendChild(el('small', {}, 'המחיר באתר שלהם.'));
       }
@@ -185,7 +187,7 @@
       card.dataset.place = o.name;
       if (o.rooms && o.rooms.length) card.appendChild(roomsPanel(o));
       if (o.url && /^https:\/\//i.test(o.url)) {
-        var a = el('a', { 'class': 'book', href: o.url, target: '_blank', rel: 'noopener noreferrer' }, 'להזמנה אצלם ←');
+        var a = el('a', { 'class': 'book', href: o.url, target: '_blank', rel: 'noopener noreferrer' }, isMapsLink(o.url) ? 'לראות את המקום ←' : 'להזמנה אצלם ←');
         card.appendChild(a);
       }
       box.appendChild(card);
@@ -249,6 +251,10 @@
     $('lodgingCards').querySelectorAll('input[type=radio]').forEach(function (i) { i.checked = i.value === state.lodging; });
     syncRooms();
     lodgingWarn();
+  }
+  // קישור לגוגל מפות = אין עדיין הזמנה אצלם: מציגים "לראות את המקום" ולא "להזמנה"
+  function isMapsLink(u) {
+    try { var x = new URL(u); return /(^|\.)goo\.gl$/.test(x.hostname) || (/(^|\.)google\.[a-z.]+$/.test(x.hostname) && x.pathname.indexOf('/maps') === 0); } catch (e) { return false; }
   }
   function lodgingWarn() {
     var w = $('lodgingWarn'), n = nights(), o = (options || FALLBACK_OPTIONS).filter(function (x) { return x.name === state.lodging; })[0];

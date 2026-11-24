@@ -68,8 +68,8 @@
   function confetti() {
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var box = document.createElement('div'); box.className = 'confetti'; box.setAttribute('aria-hidden', 'true');
-    var colors = ['#d9b861', '#e8694a', '#f6b98a', '#a9cdc4', '#fbf1e0'];
-    for (var i = 0; i < 34; i++) {
+    var colors = ['#b4532f', '#8a8d4a', '#c9a566', '#e6b08e'];
+    for (var i = 0; i < 18; i++) {
       var p = document.createElement('i');
       p.style.setProperty('--x', (Math.random() * 100) + '%');
       p.style.setProperty('--s', (5 + Math.random() * 6) + 'px');

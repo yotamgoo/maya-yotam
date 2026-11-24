@@ -4,55 +4,38 @@
 @font-face { font-family: "Heebo"; font-weight: 300 800; font-display: swap; src: url(fonts/heebo-he.woff2) format("woff2"); unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F; }
 @font-face { font-family: "Heebo"; font-weight: 300 800; font-display: swap; src: url(fonts/heebo-lat.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212; }
 
-/* כיוון אמנותי: "שקיעה באוויה". הזמנה לחתונה בערב יוני: שמיים כחול-לילה שנמסים לכתום, שמש שנוגעת בים, זהב עדין על נייר חם.
-   הטיפוגרפיה (Frank Ruhl Libre) היא הדמות. התנועה קצרה (עד כ-1.2 שניות) ולא מעכבת מילוי. */
+@font-face { font-family: "Gveret Levin"; font-weight: 400; font-display: swap; src: url(fonts/gveret-he.woff2) format("woff2"); unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F; }
+@font-face { font-family: "Gveret Levin"; font-weight: 400; font-display: swap; src: url(fonts/gveret-lat.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212; }
+
+/* כיוון אמנותי: בוהו אורגני. נייר חול, כתמי צבעי מים בטרקוטה, זית וטורקיז, תבליט בוטני של ענף זית (נחלת הכלל, Thomé 1885), כתב יד לשמות וגופן קריא לטופס.
+   הרקעים הם תמונות אפויות (img/), בלי פילטרי SVG בזמן ריצה. התנועה קצרה ולא מעכבת מילוי. */
 :root {
-  --night: #1a2142; --dusk: #3b2d63; --sun: #e8694a; --apricot: #f6b98a; --gold: #b98d2f; --gold-soft: #d9b861;
-  --paper: #fbf4e8; --card: #fffaf1; --ink: #1d2340; --muted: #667070; --line: #e6d8c0;
-  --sea-1: #1b4f63; --sea-2: #0a2234; --glass: #a9cdc4; --olive: #4f6b52; --warn-bg: #fbecc9; --err: #b3261e;
+  color-scheme: light;
+  --night: #3a2a22; --dusk: #5a4034; --sun: #b4532f; --apricot: #e6b08e; --gold: #a98a4f; --gold-soft: #c9a566;
+  --paper: #efe3cb; --card: #f8f0de; --ink: #3a2a22; --muted: #6f5f55; --line: #dccbab;
+  --glass: #a9b99a; --olive: #667a45; --warn-bg: #f5e3b8; --err: #a8281f;
   --bg: var(--paper); --radius: 16px;
-  --serif: "Frank Ruhl Libre", "Times New Roman", serif; --sans: "Heebo", -apple-system, "Segoe UI", Arial, sans-serif;
+  --serif: "Frank Ruhl Libre", "Times New Roman", serif; --sans: "Heebo", -apple-system, "Segoe UI", Arial, sans-serif; --hand: "Gveret Levin", "Frank Ruhl Libre", cursive;
   --ease: cubic-bezier(.2, .7, .2, 1);
-}
-@media (prefers-color-scheme: dark) {
-  :root { --paper: #121a33; --card: #1b2548; --ink: #f4ecdd; --muted: #aab3bd; --line: #2e3a63; --sun: #f08a68; --gold: #d9b861;
-    --olive: #9fc0a2; --warn-bg: #3a3320; --err: #ff8a80; --night: #0c1228; }
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 var(--sans); transition: background-color .4s var(--ease); }
-body.is-intro { background: var(--night); }
-body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .06; mix-blend-mode: multiply; z-index: 50;
+body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 var(--sans); }
+body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .05; mix-blend-mode: multiply; z-index: 50;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
-body.is-intro::before { opacity: .1; mix-blend-mode: screen; }
 .app, .topbar { position: relative; z-index: 2; }
 .app { max-width: 520px; margin: 0 auto; padding: 8px 20px max(36px, env(safe-area-inset-bottom)); min-height: 100vh; min-height: 100svh; }
 .hp { position: absolute; top: 0; inset-inline-start: 0; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); opacity: 0; pointer-events: none; }
 [hidden] { display: none !important; }
 
-/* ---- במה: שמיים, שמש, ים (גאומטריה בלבד, בלי תמונה) ---- */
-.stage { position: fixed; inset: 0; z-index: 0; overflow: hidden; opacity: 0; pointer-events: none; transition: opacity .5s var(--ease); }
-body.is-intro .stage { opacity: 1; }
-.sky { position: absolute; inset: 0 0 38% 0; background: linear-gradient(to bottom, #131a38 0%, #2c2a5c 34%, #8c3f6b 60%, #e0705a 82%, #f7b479 100%); }
-.sun { position: absolute; left: 50%; bottom: 38%; width: min(66vw, 380px); aspect-ratio: 1; transform: translate(-50%, 50%); border-radius: 50%;
-  background: radial-gradient(circle at 50% 38%, #fff0c4 0%, #ffc47a 46%, #f48a55 100%);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0 26%, transparent 26% 29%, #000 29% 35%, transparent 35% 39%, #000 39% 44%, transparent 44% 48%, #000 48%);
-  mask-image: linear-gradient(to bottom, #000 0 26%, transparent 26% 29%, #000 29% 35%, transparent 35% 39%, #000 39% 44%, transparent 44% 48%, #000 48%);
-  box-shadow: 0 0 120px 30px rgba(255, 170, 100, .28); }
-.sea { position: absolute; left: 0; right: 0; bottom: 0; height: 38%; background: linear-gradient(to bottom, var(--sea-1) 0%, #0f3248 50%, var(--sea-2) 100%); overflow: hidden; }
-.sea::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, .06) 0 1px, transparent 1px 10px); }
-.reflect { position: absolute; top: 0; left: 50%; width: 34%; height: 46%; transform: translateX(-50%);
-  background: repeating-linear-gradient(to bottom, rgba(255, 196, 122, .9) 0 3px, transparent 3px 11px);
-  clip-path: polygon(10% 0, 90% 0, 100% 100%, 0 100%);
-  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 96%); mask-image: linear-gradient(to bottom, #000, transparent 96%); }
-.js .stage .sun { animation: sunrise 1.5s var(--ease) both; }
-.js .stage .reflect { animation: shimmer 1.5s var(--ease) both; }
-@keyframes sunrise { from { transform: translate(-50%, 100%); } to { transform: translate(-50%, 50%); } }
-@keyframes shimmer { from { opacity: 0; } to { opacity: 1; } }
+/* ---- רקע: נייר חול חלק, ובפתיחה תמונה אפויה עם ענף זית וכתם צבע ---- */
+.stage { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: var(--paper); }
+.bgi { position: absolute; inset: 0; background: url(img/bg-intro.jpg) center top / cover; opacity: 0; transition: opacity .5s var(--ease); }
+body.is-intro .bgi { opacity: 1; }
 
 /* ---- סרגל עליון והתקדמות ---- */
 .topbar { max-width: 520px; margin: 0 auto; padding: max(14px, env(safe-area-inset-top)) 20px 6px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 10px 12px; }
-.mark { font-family: var(--serif); font-weight: 800; font-size: 1.2rem; letter-spacing: .01em; }
+.mark { font-family: var(--hand); font-size: 1.35rem; }
 .mark i { font-style: normal; color: var(--gold); padding: 0 .12em; }
 .count { color: var(--muted); font-size: .9rem; font-variant-numeric: tabular-nums; }
 .ticks { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
@@ -61,33 +44,35 @@ body.is-intro .stage { opacity: 1; }
 .ticks b.now { transform: scaleY(1.9); background: var(--sun); }
 
 /* ---- טיפוגרפיה ---- */
-h1, h2 { font-family: var(--serif); font-weight: 800; letter-spacing: -.01em; margin: 0; }
-h1 { font-size: clamp(2.4rem, 11vw, 3.4rem); line-height: 1.05; }
-h2 { font-size: clamp(1.9rem, 8vw, 2.4rem); line-height: 1.12; margin: .5rem 0 .6rem; }
-.step:not(.intro) h2::before { content: ""; display: block; width: 44px; height: 2px; margin-bottom: 14px; background: linear-gradient(to left, var(--gold), transparent); }
+h1, h2 { font-family: var(--hand); font-weight: 400; margin: 0; letter-spacing: 0; }
+h2 { font-family: var(--serif); font-weight: 800; }
+h1 { font-size: clamp(3.4rem, 18vw, 5.2rem); line-height: .96; }
+h2 { font-size: clamp(1.7rem, 7.4vw, 2.1rem); line-height: 1.2; margin: .4rem 0 .5rem; color: var(--night); }
 h1:focus, h2:focus { outline: none; }
 .w { display: inline-block; }
-.js h1 .w, .js h2 .w { opacity: 0; transform: translateY(.45em); }
-.js .step.in h1 .w, .js .step.in h2 .w { opacity: 1; transform: none; transition: opacity .45s var(--ease), transform .5s var(--ease); transition-delay: calc(var(--i) * 55ms + 60ms); }
-.eyebrow { color: var(--gold-soft); font-weight: 600; letter-spacing: .14em; margin: 0 0 .6rem; font-size: .95rem; }
+.js h1 .w, .js h2 .w { opacity: 0; transform: translateY(.4em); }
+.js .step.in h1 .w, .js .step.in h2 .w { opacity: 1; transform: none; transition: opacity .4s var(--ease), transform .45s var(--ease); transition-delay: calc(var(--i) * 50ms + 50ms); }
+.eyebrow { font-family: var(--serif); font-weight: 700; letter-spacing: .22em; color: var(--sun); margin: 0 0 .6rem; font-size: .9rem; }
 .lead { font-size: 1.1rem; max-width: 34ch; }
 .small, .hint { color: var(--muted); font-size: .92rem; }
-.info { margin: 0 0 16px; padding: 10px 14px; border-inline-start: 3px solid var(--gold); background: color-mix(in srgb, var(--gold) 9%, transparent); border-radius: 0 12px 12px 0; font-size: .98rem; }
+.info { margin: 0 0 16px; color: var(--muted); font-size: .98rem; }
 
 /* ---- פתיחה ---- */
-.intro { min-height: calc(100svh - 28px); display: flex; flex-direction: column; justify-content: space-between; padding: 7vh 0 3vh; color: #fbf1e0; }
-.intro h1 { font-size: clamp(3rem, 15vw, 4.6rem); line-height: .98; font-weight: 900; text-shadow: 0 2px 24px rgba(10, 14, 40, .35); }
-.intro h1 .w:nth-of-type(1)::after { content: " &"; color: var(--gold-soft); font-weight: 500; }
-.intro h1 .w:nth-of-type(3) { display: block; font-size: .36em; font-weight: 600; letter-spacing: .42em; color: var(--gold-soft); margin-top: .5em; }
-.when { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 18px 0 0; font-weight: 500; letter-spacing: .04em; color: #fbe6c4; }
-.when i { width: 5px; height: 5px; background: var(--gold-soft); transform: rotate(45deg); flex: none; }
-.intro .lead { color: #e7eef0; margin: 0; }
-.intro .small { color: #a9c0c4; }
+.intro { min-height: calc(100svh - 28px); display: flex; flex-direction: column; justify-content: space-between; padding: 33svh 0 3vh; color: var(--night); }
+.intro-top { transform: none; }
+.intro h1 { color: var(--night); }
+.intro h1 .w:nth-of-type(1)::after { content: " &"; color: var(--sun); }
+.intro h1 .w:nth-of-type(3) { display: block; font-family: var(--serif); font-size: .26em; font-weight: 700; letter-spacing: .42em; margin-top: .8em; color: #6d5a3a; }
+.when { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 18px 0 0; font-family: var(--serif); font-weight: 700; letter-spacing: .04em; }
+.when span:nth-of-type(2) { font-size: 1.25em; font-weight: 900; }
+.when i { width: 4px; height: 4px; background: var(--muted); border-radius: 50%; flex: none; opacity: .6; }
+.intro .lead { margin: 0; }
 .intro .fine { margin: 10px 0 0; }
 .intro .actions { position: static; background: none; padding: 0; margin-top: 18px; }
-.js .intro .eyebrow, .js .intro .when, .js .intro .lead, .js .intro .actions, .js .intro .fine { opacity: 0; transform: translateY(12px); }
-.js .intro.in .eyebrow, .js .intro.in .when, .js .intro.in .lead, .js .intro.in .actions, .js .intro.in .fine { opacity: 1; transform: none; transition: opacity .5s var(--ease), transform .6s var(--ease); }
-.js .intro.in .when { transition-delay: .3s; } .js .intro.in .lead { transition-delay: .45s; } .js .intro.in .actions { transition-delay: .55s; } .js .intro.in .fine { transition-delay: .65s; }
+.js .intro .eyebrow, .js .intro .when, .js .intro .lead, .js .intro .actions, .js .intro .fine { opacity: 0; transform: translateY(10px); }
+.js .intro.in .eyebrow { opacity: 1; transform: none; transition: opacity .4s var(--ease); }
+.js .intro.in .when, .js .intro.in .lead, .js .intro.in .actions, .js .intro.in .fine { opacity: 1; transform: none; transition: opacity .45s var(--ease), transform .5s var(--ease); }
+.js .intro.in .when { transition-delay: .25s; } .js .intro.in .lead { transition-delay: .35s; } .js .intro.in .actions { transition-delay: .45s; } .js .intro.in .fine { transition-delay: .5s; }
 
 /* ---- מעבר בין מסכים (קצר) ---- */
 .step:not(.intro) { padding-top: 10px; }
@@ -114,13 +99,12 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline: non
 .actions { display: flex; gap: 10px; margin-top: 24px; position: sticky; bottom: 0; padding: 14px 0 max(6px, env(safe-area-inset-bottom)); background: linear-gradient(transparent, var(--bg) 32%); }
 .btn { font: inherit; font-weight: 700; border-radius: 999px; border: 1.5px solid transparent; padding: 14px 24px; min-height: 52px; cursor: pointer; transition: transform .15s var(--ease), background-color .2s, border-color .2s, opacity .2s; display: inline-flex; align-items: center; justify-content: center; gap: .5em; }
 .btn:active { transform: scale(.97); }
-.btn.primary { background: var(--night); color: #fbf1e0; flex: 1; }
+.btn.primary { background: var(--night); color: #f6ecd6; flex: 1; }
 .btn.primary:hover { background: var(--dusk); }
-.btn.primary.light { background: var(--sun); color: #fff; flex: none; padding-inline: 32px; font-size: 1.1rem; box-shadow: 0 10px 30px -10px rgba(232, 105, 74, .7); }
-.btn.primary.light:hover { background: #f0785a; }
+.btn.primary.light { background: var(--night); color: #f6ecd6; flex: none; padding-inline: 32px; font-size: 1.1rem; }
+.btn.primary.light:hover { background: var(--dusk); }
 .btn.primary span { display: inline-block; transition: transform .25s var(--ease); }
 .btn.primary:hover span { transform: translateX(-4px); }
-@media (prefers-color-scheme: dark) { .btn.primary { background: var(--sun); color: #fff; } .btn.primary:hover { background: #f0785a; } }
 .btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
 .btn.ghost:hover { border-color: var(--gold); }
 .btn.round { width: 52px; padding: 0; font-size: 1.5rem; line-height: 1; background: var(--card); border-color: var(--line); color: var(--ink); }
@@ -148,7 +132,6 @@ input[type=checkbox]:checked { background: var(--sun) url("data:image/svg+xml;ut
 .chip:hover span { border-color: var(--gold); }
 .chip input:active + span { transform: scale(.96); }
 .chip input:checked + span { background: var(--night); border-color: var(--night); color: #fbf1e0; font-weight: 700; box-shadow: 0 0 0 2px var(--card), 0 0 0 3.5px var(--gold); }
-@media (prefers-color-scheme: dark) { .chip input:checked + span { background: var(--sun); border-color: var(--sun); color: #fff; } }
 .chip input:disabled + span { opacity: .35; }
 .nights { color: var(--olive); font: 700 1.15rem var(--serif); min-height: 1.6em; }
 .cards { display: grid; gap: 10px; margin-bottom: 8px; }
@@ -158,7 +141,7 @@ input[type=checkbox]:checked { background: var(--sun) url("data:image/svg+xml;ut
 .card input { margin-top: 3px; }
 .card b { display: block; font-size: 1.05rem; }
 .card small { display: block; color: var(--muted); margin-top: 2px; font-size: .92rem; }
-.card:has(input:checked) { border-color: var(--sun); box-shadow: 0 0 0 1.5px var(--sun) inset, 0 10px 26px -16px var(--sun); }
+.card:has(input:checked) { border-color: var(--sun); box-shadow: 0 0 0 1.5px var(--sun) inset; }
 .lodge { flex-direction: column; cursor: default; overflow: hidden; }
 .lodge-hero { display: block; width: calc(100% + 32px); margin: -16px -16px 14px; max-width: none; height: auto; aspect-ratio: 2.1 / 1; object-fit: cover; background: var(--line); }
 .lodge .row { display: flex; gap: 14px; align-items: flex-start; width: 100%; cursor: pointer; }
@@ -193,7 +176,7 @@ input[type=checkbox]:checked { background: var(--sun) url("data:image/svg+xml;ut
 .summary dt { color: var(--muted); font-size: .85rem; }
 .summary dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
 .confetti { position: fixed; inset: 0; z-index: 40; pointer-events: none; overflow: hidden; }
-.confetti i { position: absolute; top: -12px; left: var(--x); width: var(--s); height: calc(var(--s) * 1.6); background: var(--c); border-radius: 2px; opacity: 0; animation: fall var(--d) var(--delay) cubic-bezier(.3, .6, .4, 1) forwards; }
+.confetti i { position: absolute; top: -12px; left: var(--x); width: var(--s); height: calc(var(--s) * 1.6); background: var(--c); border-radius: 0 100% 0 100%; opacity: 0; animation: fall var(--d) var(--delay) cubic-bezier(.3, .6, .4, 1) forwards; }
 @keyframes fall { 0% { opacity: 1; transform: translateY(0) rotate(0); } 100% { opacity: 0; transform: translateY(105vh) translateX(var(--dx)) rotate(var(--r)); } }
 
 /* ---- שולחן עבודה ---- */

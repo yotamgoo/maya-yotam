@@ -9,9 +9,10 @@
 <title>מאיה ויותם מתחתנים</title>
 <link rel="preload" href="fonts/frank-he.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add("js")</script>
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body class="is-intro">
+<div class="stage" aria-hidden="true"><div class="sky"></div><div class="sun"></div><div class="sea"><div class="reflect"></div></div></div>
 <header class="topbar" id="topbar" hidden>
   <span class="mark">מאיה <i>&amp;</i> יותם</span>
   <span class="count" id="stepCount" aria-hidden="true"></span>
@@ -25,23 +26,26 @@
     <div class="hp" aria-hidden="true"><label>השאירו ריק <input type="text" name="hp_zq7" id="hp" tabindex="-1" autocomplete="off" data-lpignore="true" data-form-type="other"></label></div>
 
     <section class="step intro" data-step="0">
-      <div class="rings" aria-hidden="true"><i></i><i></i><i></i></div>
-      <p class="eyebrow">יוון · אוויה · יוני 2027</p>
-      <div class="bigdate" aria-hidden="true"><span class="d">18</span><span class="m">.6</span></div>
-      <h1 tabindex="-1">מאיה ויותם מתחתנים</h1>
-      <p class="lead">כמה שאלות קצרות כדי שנוכל לתכנן: מי מגיע, מתי, איך מגיעים ואיפה ישנים. לוקח כמה דקות.</p>
-      <div class="actions"><button type="button" class="btn primary light" data-next>מתחילים <span aria-hidden="true">←</span></button></div>
-      <p class="small fine">אפשר לחזור לאותו לינק ולעדכן בכל זמן, עם אותו שם וטלפון.</p>
+      <div class="intro-top">
+        <p class="eyebrow">הזמנה לחתונה</p>
+        <h1 tabindex="-1">מאיה ויותם מתחתנים</h1>
+        <p class="when"><span>יום שישי</span><i aria-hidden="true"></i><span>18.6.2027</span><i aria-hidden="true"></i><span>אוויה, יוון</span></p>
+      </div>
+      <div class="intro-bottom">
+        <p class="lead">נשמח שתגיעו, ורוצים לעזור לכם להגיע ולישון טוב. כמה שאלות קצרות, בערך דקה-שתיים.</p>
+        <div class="actions"><button type="button" class="btn primary light" data-next>בואו נתחיל <span aria-hidden="true">←</span></button></div>
+        <p class="small fine">אפשר לחזור לאותו לינק ולעדכן בכל זמן.</p>
+      </div>
     </section>
 
     <section class="step" data-step="1" hidden>
-      <h2 tabindex="-1">מי אתם?</h2>
+      <h2 tabindex="-1">קודם כל, מי אתם?</h2>
       <label class="field"><span>שם מלא</span>
         <input type="text" id="name" maxlength="80" autocomplete="name" required>
         <small class="err" id="err-name"></small></label>
       <label class="field"><span>טלפון</span>
         <input type="tel" id="phone" inputmode="tel" maxlength="24" autocomplete="tel" dir="ltr" placeholder="050-0000000" required>
-        <small class="hint">בעזרתו נזהה אתכם אם תחזרו לעדכן. מספר ישראלי, או עם קידומת מדינה.</small>
+        <small class="hint">כדי שנדע שזה אתם אם תחזרו לעדכן. ביקשנו רק את זה.</small>
         <small class="err" id="err-phone"></small></label>
       <div class="actions"><button type="button" class="btn ghost" data-back>חזרה</button><button type="button" class="btn primary" data-next id="detailsNext">המשך <span aria-hidden="true">←</span></button></div>
     </section>
@@ -58,7 +62,7 @@
           <button type="button" class="btn round" data-dec="children" aria-label="פחות ילדים">−</button>
           <output id="children" aria-live="polite">0</output>
           <button type="button" class="btn round" data-inc="children" aria-label="עוד ילדים">+</button></div></div>
-      <label class="field" id="kidsAgesField" hidden><span>גילאי הילדים</span>
+      <label class="field" id="kidsAgesField" hidden><span>גילאי הילדים <em>(לא חובה)</em></span>
         <input type="text" id="kidsAges" maxlength="60" placeholder="למשל: 3 ו-7">
       </label>
       <label class="field"><span>שמות המלווים <em>(לא חובה)</em></span>
@@ -82,8 +86,8 @@
     </section>
 
     <section class="step" data-step="4" hidden>
-      <h2 tabindex="-1">איך מגיעים לאוויה?</h2>
-      <p class="small">אנחנו בפוליטיקה שבאוויה, בערך שעה וחצי נסיעה משדה התעופה באתונה.</p>
+      <h2 tabindex="-1">איך מגיעים?</h2>
+      <p class="info">אנחנו בפוליטיקה שבאוויה, כשעה וחצי נסיעה משדה התעופה באתונה.</p>
       <div class="cards" id="transportCards" role="radiogroup" aria-label="אופן הגעה">
         <label class="card"><input type="radio" name="transport" value="shuttle"><span><b>צריך הסעה מהשדה</b><small>עוד לא סגרנו הסעות. אנחנו אוספים את הצורך כדי לדעת כמה רכבים.</small></span></label>
         <label class="card"><input type="radio" name="transport" value="rental"><span><b>שוכר/ת רכב</b><small>נדע כמה רכבים יהיו שם.</small></span></label>
@@ -105,7 +109,7 @@
 
     <section class="step" data-step="5" hidden>
       <h2 tabindex="-1">איפה ישנים?</h2>
-      <p class="small">ההזמנה היא ישירות אצל המקום, לא דרכנו. הבחירה כאן רק כדי שנדע כמה יחידות צריך.</p>
+      <p class="info">ההזמנה היא ישירות אצל המקום, לא דרכנו. הבחירה כאן רק עוזרת לנו לדעת כמה יחידות צריך.</p>
       <div class="cards" id="lodgingCards" role="radiogroup" aria-label="לינה"></div>
       <small class="err" id="err-lodging"></small>
       <p class="warn" id="lodgingWarn" role="status" hidden></p>
@@ -113,21 +117,21 @@
     </section>
 
     <section class="step" data-step="6" hidden>
-      <h2 tabindex="-1">עוד משהו שחשוב לנו לדעת?</h2>
+      <h2 tabindex="-1">משהו שחשוב שנדע?</h2>
       <label class="field"><span>אלרגיות או הגבלות באוכל <em>(לא חובה)</em></span>
         <textarea id="allergies" rows="2" maxlength="400" placeholder="למשל: אלרגיה לבוטנים, צמחוני"></textarea></label>
       <label class="field"><span>הערות <em>(לא חובה)</em></span>
         <textarea id="notes" rows="3" maxlength="600" placeholder="כל דבר אחר"></textarea></label>
       <p class="small" id="keepHint" hidden>יש לנו אלרגיות והערות שמורות מהמילוי הקודם. אם תשאירו את השדות ריקים הן יישארו כמו שהן, ואם תכתבו משהו חדש הוא יחליף אותן.</p>
       <small class="err" id="err-submit"></small>
-      <div class="actions"><button type="button" class="btn ghost" data-back>חזרה</button><button type="submit" class="btn primary" id="submitBtn">שולחים</button></div>
+      <div class="actions"><button type="button" class="btn ghost" data-back>חזרה</button><button type="submit" class="btn primary" id="submitBtn">סיימתי</button></div>
     </section>
 
     <section class="step" data-step="7" hidden>
       <div class="done-head">
         <svg class="check" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24"/><path d="M15 27l8 8 14-16"/></svg>
         <h2 tabindex="-1">קיבלנו, תודה!</h2>
-        <p class="lead" id="doneLead">נעדכן כשיהיו פרטים נוספים.</p>
+        <p class="lead" id="doneLead">נתראה ב-18.6 באוויה. נעדכן אתכם כשיהיו פרטים נוספים.</p>
       </div>
       <dl class="summary" id="summary"></dl>
       <p class="small">שיניתם תוכניות? חוזרים לאותו לינק, מזינים אותו שם וטלפון, והתשובה מתעדכנת.</p>
@@ -135,7 +139,7 @@
     </section>
   </form>
 </main>
-<script src="config.js?v=3"></script>
-<script src="app.js?v=3"></script>
+<script src="config.js?v=4"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>

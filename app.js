@@ -64,6 +64,25 @@
       sp.textContent = word; h.appendChild(sp); h.appendChild(document.createTextNode(' '));
     });
   });
+  // קונפטי קצר בסיום: לא חוסם, מושבת בתנועה מופחתת
+  function confetti() {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var box = document.createElement('div'); box.className = 'confetti'; box.setAttribute('aria-hidden', 'true');
+    var colors = ['#d9b861', '#e8694a', '#f6b98a', '#a9cdc4', '#fbf1e0'];
+    for (var i = 0; i < 34; i++) {
+      var p = document.createElement('i');
+      p.style.setProperty('--x', (Math.random() * 100) + '%');
+      p.style.setProperty('--s', (5 + Math.random() * 6) + 'px');
+      p.style.setProperty('--c', colors[i % colors.length]);
+      p.style.setProperty('--d', (1.6 + Math.random() * 1.2) + 's');
+      p.style.setProperty('--delay', (Math.random() * 0.35) + 's');
+      p.style.setProperty('--dx', (Math.random() * 120 - 60) + 'px');
+      p.style.setProperty('--r', (Math.random() * 720 - 360) + 'deg');
+      box.appendChild(p);
+    }
+    document.body.appendChild(box);
+    setTimeout(function () { box.remove(); }, 3400);
+  }
   function show(n) {
     var prev = current;
     current = n;
@@ -77,6 +96,7 @@
     window.scrollTo(0, 0);
     var h = steps[n].querySelector('h1,h2');
     requestAnimationFrame(function () { steps[n].classList.add('in'); });
+    if (n === 7) confetti();
     if (h) { h.focus({ preventScroll: true }); }
   }
 

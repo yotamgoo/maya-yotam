@@ -157,6 +157,18 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline: non
 .summary dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
 
 /* ---- שולחן עבודה: אותה עמודה, ממורכזת ---- */
+/* ---- חדרים בתוך כרטיס לינה ---- */
+.rooms { width: 100%; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); }
+.rooms-hint { margin: 0 0 10px; color: var(--muted); font-size: .92rem; }
+.roomlist { display: grid; gap: 8px; }
+.room { background: color-mix(in srgb, var(--paper) 55%, var(--card)); border: 1.5px solid var(--line); border-radius: 14px; padding: 8px; transition: border-color .2s, box-shadow .2s; }
+.room:has(input:checked) { border-color: var(--sun); box-shadow: 0 0 0 1.5px var(--sun) inset; }
+.roompick { display: flex; gap: 12px; align-items: center; cursor: pointer; }
+.roompick input { accent-color: var(--sun); width: 22px; height: 22px; flex: none; margin: 0 4px; }
+.roompick img { width: 96px; height: 96px; object-fit: cover; border-radius: 10px; flex: none; background: var(--line); }
+.roominfo b { display: block; font-size: 1rem; }
+.roominfo small { display: block; color: var(--muted); font-size: .88rem; line-height: 1.35; margin-top: 2px; }
+.roomlink { display: inline-block; margin: 4px 4px 0; color: var(--sun); font-size: .9rem; font-weight: 600; text-underline-offset: 3px; }
 @media (min-width: 700px) { .app { padding-inline: 8px; } .intro { min-height: calc(100vh - 44px); } }
 
 /* ---- תנועה מופחתת: מצבים סופיים מיד ---- */

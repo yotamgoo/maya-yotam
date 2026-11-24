@@ -16,7 +16,7 @@
   var current = 0;
   var options = null;
   var state = { name: '', phone: '', adults: 1, children: 0, kidsAges: '', companions: '', arrive: '', depart: '', flight: '',
-    transport: '', airport: 'אתונה (ATH)', landing: '', passengers: 1, lodging: '', notes: '', allergies: '' };
+    transport: '', airport: 'אתונה (ATH)', landing: '', passengers: 1, lodging: '', rooms: [], notes: '', allergies: '' };
   var passengersTouched = false;
   var existing = false;
 
@@ -160,6 +160,8 @@
       }
       if (o.code) body.appendChild(el('span', { 'class': 'code' }, 'קוד הנחה: ' + o.code));
       row.appendChild(body); card.appendChild(row);
+      card.dataset.place = o.name;
+      if (o.rooms && o.rooms.length) card.appendChild(roomsPanel(o));
       if (o.url && /^https:\/\//i.test(o.url)) {
         var a = el('a', { 'class': 'book', href: o.url, target: '_blank', rel: 'noopener noreferrer' }, 'להזמנה אצלם ←');
         card.appendChild(a);
@@ -172,13 +174,55 @@
       var s = el('span'); s.appendChild(el('b', {}, f.name)); s.appendChild(el('small', {}, f.note));
       lab.appendChild(s); box.appendChild(lab);
     });
-    box.querySelectorAll('input').forEach(function (i) {
-      i.addEventListener('change', function () { state.lodging = i.value; setErr('err-lodging', ''); lodgingWarn(); });
+    box.querySelectorAll('input[type=radio]').forEach(function (i) {
+      i.addEventListener('change', function () { state.lodging = i.value; setErr('err-lodging', ''); lodgingWarn(); syncRooms(); });
     });
     syncLodging();
   }
+  // חדרים של מקום: מוצגים רק כשהמקום נבחר. סימון = העדפה, לא הזמנה.
+  function roomsPanel(o) {
+    var panel = el('div', { 'class': 'rooms', hidden: '' });
+    panel.appendChild(el('p', { 'class': 'rooms-hint' }, 'ככה נראים החדרים. סמנו את מה שבא לכם (אפשר כמה). זו העדפה בלבד, לא הזמנה, והזמינות אצלם.'));
+    var list = el('div', { 'class': 'roomlist' });
+    o.rooms.forEach(function (r) {
+      var item = el('div', { 'class': 'room' });
+      var lab = el('label', { 'class': 'roompick' });
+      var cb = el('input', { type: 'checkbox', value: r.name });
+      cb.checked = state.rooms.indexOf(r.name) !== -1;
+      cb.addEventListener('change', function () {
+        var i = state.rooms.indexOf(r.name);
+        if (cb.checked && i === -1) state.rooms.push(r.name);
+        if (!cb.checked && i !== -1) state.rooms.splice(i, 1);
+      });
+      lab.appendChild(cb);
+      if (r.image) {
+        var img = el('img', { src: r.image, alt: 'החדר ' + r.name, loading: 'lazy', decoding: 'async', width: '96', height: '96', referrerpolicy: 'no-referrer' });
+        img.addEventListener('error', function () { img.remove(); });
+        lab.appendChild(img);
+      }
+      var info = el('span', { 'class': 'roominfo' });
+      info.appendChild(el('b', {}, r.name + (r.type ? ' · ' + r.type : '')));
+      var facts = [r.size, r.capacity, r.view].filter(Boolean).join(' · ');
+      if (facts) info.appendChild(el('small', {}, facts));
+      lab.appendChild(info);
+      item.appendChild(lab);
+      if (r.url) item.appendChild(el('a', { 'class': 'roomlink', href: r.url, target: '_blank', rel: 'noopener noreferrer' }, 'לעוד תמונות ←'));
+      list.appendChild(item);
+    });
+    panel.appendChild(list);
+    return panel;
+  }
+  function syncRooms() {
+    $('lodgingCards').querySelectorAll('.card.lodge').forEach(function (card) {
+      var panel = card.querySelector('.rooms');
+      if (!panel) return;
+      panel.hidden = !card.querySelector('.row input').checked;
+      panel.querySelectorAll('input[type=checkbox]').forEach(function (cb) { cb.checked = state.rooms.indexOf(cb.value) !== -1; });
+    });
+  }
   function syncLodging() {
-    $('lodgingCards').querySelectorAll('input').forEach(function (i) { i.checked = i.value === state.lodging; });
+    $('lodgingCards').querySelectorAll('input[type=radio]').forEach(function (i) { i.checked = i.value === state.lodging; });
+    syncRooms();
     lodgingWarn();
   }
   function lodgingWarn() {
@@ -264,6 +308,7 @@
     var p = JSON.parse(JSON.stringify(state));
     p.action = 'submit';
     p.hp = $('hp').value;
+    p.rooms = payloadRooms();
     p.name = state.name.trim();
     if (p.transport === 'shuttle') {
       p.airport = $('airport').value === '__other' ? ($('airportOther').value.trim() || 'שדה אחר') : 'אתונה (ATH)';
@@ -289,6 +334,11 @@
     });
   }
 
+  function payloadRooms() {
+    var chosen = (options || FALLBACK_OPTIONS).filter(function (x) { return x.name === state.lodging; })[0];
+    var valid = chosen && chosen.rooms ? chosen.rooms.map(function (r) { return r.name; }) : [];
+    return state.rooms.filter(function (n) { return valid.indexOf(n) !== -1; });
+  }
   function renderSummary() {
     var dl = $('summary'); dl.textContent = '';
     var n = nights();
@@ -301,6 +351,8 @@
       ['הגעה', tr + (state.transport === 'shuttle' ? ', ' + state.passengers + ' נוסעים' + (state.landing ? ', נחיתה ' + state.landing : '') : '')],
       ['לינה', lod ? lod.name : state.lodging]
     ];
+    var pickedRooms = payloadRooms();
+    if (pickedRooms.length) rows.push(['חדרים שמעניינים אתכם', pickedRooms.join(', ')]);
     if (state.allergies) rows.push(['אלרגיות', state.allergies]);
     if (state.notes) rows.push(['הערות', state.notes]);
     rows.forEach(function (r) { var d = el('div'); d.appendChild(el('dt', {}, r[0])); d.appendChild(el('dd', {}, r[1])); dl.appendChild(d); });

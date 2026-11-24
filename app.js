@@ -135,9 +135,6 @@
   document.querySelectorAll('input[name=transport]').forEach(function (i) {
     i.addEventListener('change', function () { state.transport = i.value; setErr('err-transport', ''); refreshTransport(); });
   });
-  $('airport').addEventListener('change', function () {
-    $('airportOtherField').hidden = $('airport').value !== '__other';
-  });
 
   // ---------- לינה ----------
   function renderLodging() {
@@ -145,6 +142,11 @@
     box.textContent = '';
     (options || FALLBACK_OPTIONS).forEach(function (o) {
       var card = el('div', { 'class': 'card lodge' });
+      if (o.image) {
+        var hero = el('img', { 'class': 'lodge-hero', src: o.image, alt: 'המקום: ' + o.name, loading: 'lazy', decoding: 'async', width: '1900', height: '800', referrerpolicy: 'no-referrer' });
+        hero.addEventListener('error', function () { hero.remove(); });
+        card.appendChild(hero);
+      }
       var row = el('label', { 'class': 'row' });
       row.appendChild(el('input', { type: 'radio', name: 'lodging', value: o.name }));
       var body = el('span');
@@ -182,7 +184,9 @@
   // חדרים של מקום: מוצגים רק כשהמקום נבחר. סימון = העדפה, לא הזמנה.
   function roomsPanel(o) {
     var panel = el('div', { 'class': 'rooms', hidden: '' });
-    panel.appendChild(el('p', { 'class': 'rooms-hint' }, 'ככה נראים החדרים. סמנו את מה שבא לכם (אפשר כמה). זו העדפה בלבד, לא הזמנה, והזמינות אצלם.'));
+    var det = el('details', { 'class': 'roomsbox' });
+    det.appendChild(el('summary', {}, 'איזה חדר בא לכם? (' + o.rooms.length + ' חדרים)'));
+    det.appendChild(el('p', { 'class': 'rooms-hint' }, 'סמנו את מה שבא לכם (אפשר כמה). זו העדפה בלבד, לא הזמנה, והזמינות אצלם.'));
     var list = el('div', { 'class': 'roomlist' });
     o.rooms.forEach(function (r) {
       var item = el('div', { 'class': 'room' });
@@ -196,7 +200,7 @@
       });
       lab.appendChild(cb);
       if (r.image) {
-        var img = el('img', { src: r.image, alt: 'החדר ' + r.name, loading: 'lazy', decoding: 'async', width: '96', height: '96', referrerpolicy: 'no-referrer' });
+        var img = el('img', { src: r.image, alt: 'החדר ' + r.name, loading: 'lazy', decoding: 'async', width: '112', height: '112', referrerpolicy: 'no-referrer' });
         img.addEventListener('error', function () { img.remove(); });
         lab.appendChild(img);
       }
@@ -209,7 +213,8 @@
       if (r.url) item.appendChild(el('a', { 'class': 'roomlink', href: r.url, target: '_blank', rel: 'noopener noreferrer' }, 'לעוד תמונות ←'));
       list.appendChild(item);
     });
-    panel.appendChild(list);
+    det.appendChild(list);
+    panel.appendChild(det);
     return panel;
   }
   function syncRooms() {
@@ -241,15 +246,11 @@
   }
 
   // ---------- שמירת שדות טקסט ----------
-  ['name', 'phone', 'kidsAges', 'companions', 'flight', 'landing', 'airportOther', 'notes', 'allergies'].forEach(function (id) {
+  ['name', 'phone', 'kidsAges', 'companions', 'flight', 'landing', 'notes', 'allergies'].forEach(function (id) {
     $(id).addEventListener('input', function () { state[id] = $(id).value; });
   });
   function syncInputs() {
     ['name', 'phone', 'kidsAges', 'companions', 'flight', 'landing', 'notes', 'allergies'].forEach(function (id) { $(id).value = state[id] || ''; });
-    var other = state.airport && state.airport !== 'אתונה (ATH)';
-    $('airport').value = other ? '__other' : 'אתונה (ATH)';
-    $('airportOtherField').hidden = !other;
-    $('airportOther').value = other ? state.airport : '';
     renderCounts(); refreshDates(); refreshTransport(); syncLodging();
   }
 
@@ -311,8 +312,7 @@
     p.rooms = payloadRooms();
     p.name = state.name.trim();
     if (p.transport === 'shuttle') {
-      p.airport = $('airport').value === '__other' ? ($('airportOther').value.trim() || 'שדה אחר') : 'אתונה (ATH)';
-      state.airport = p.airport;
+      p.airport = 'אתונה (ATH)'; // כולם נוחתים באתונה; העמודה בשיט נשארת
     } else { p.airport = ''; p.landing = ''; p.passengers = ''; }
     return p;
   }

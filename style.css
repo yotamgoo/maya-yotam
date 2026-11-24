@@ -157,6 +157,11 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline: non
 .summary dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
 
 /* ---- שולחן עבודה: אותה עמודה, ממורכזת ---- */
+/* ---- תמונה ראשית בכרטיס לינה ---- */
+.lodge { overflow: hidden; }
+.lodge-hero { display: block; width: calc(100% + 32px); margin: -16px -16px 14px; max-width: none; height: auto; aspect-ratio: 2.1 / 1; object-fit: cover; background: var(--line); border-radius: var(--radius) var(--radius) 0 0; }
+.roomsbox > summary { cursor: pointer; font-weight: 700; padding: 8px 0; list-style-position: inside; }
+.roomsbox[open] > summary { margin-bottom: 4px; }
 /* ---- חדרים בתוך כרטיס לינה ---- */
 .rooms { width: 100%; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); }
 .rooms-hint { margin: 0 0 10px; color: var(--muted); font-size: .92rem; }
@@ -165,7 +170,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { outline: non
 .room:has(input:checked) { border-color: var(--sun); box-shadow: 0 0 0 1.5px var(--sun) inset; }
 .roompick { display: flex; gap: 12px; align-items: center; cursor: pointer; }
 .roompick input { accent-color: var(--sun); width: 22px; height: 22px; flex: none; margin: 0 4px; }
-.roompick img { width: 96px; height: 96px; object-fit: cover; border-radius: 10px; flex: none; background: var(--line); }
+.roompick img { width: 112px; height: 112px; object-fit: cover; border-radius: 10px; flex: none; background: var(--line); }
 .roominfo b { display: block; font-size: 1rem; }
 .roominfo small { display: block; color: var(--muted); font-size: .88rem; line-height: 1.35; margin-top: 2px; }
 .roomlink { display: inline-block; margin: 4px 4px 0; color: var(--sun); font-size: .9rem; font-weight: 600; text-underline-offset: 3px; }

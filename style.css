@@ -1,0 +1,167 @@
+/* גופנים מקומיים (Frank Ruhl Libre, Heebo; רישיון OFL), בלי בקשות לצד שלישי */
+@font-face { font-family: "Frank Ruhl Libre"; font-weight: 300 900; font-display: swap; src: url(fonts/frank-he.woff2) format("woff2"); unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F; }
+@font-face { font-family: "Frank Ruhl Libre"; font-weight: 300 900; font-display: swap; src: url(fonts/frank-lat.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212; }
+@font-face { font-family: "Heebo"; font-weight: 300 800; font-display: swap; src: url(fonts/heebo-he.woff2) format("woff2"); unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F; }
+@font-face { font-family: "Heebo"; font-weight: 300 800; font-display: swap; src: url(fonts/heebo-lat.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212; }
+
+/* כיוון אמנותי: "דמדומי האגאי". ים עמוק, נייר חם, שמש כתומה. הטיפוגרפיה היא הדמות. */
+:root {
+  --sea: #14303a; --sea-2: #1d4452; --paper: #f6efe3; --card: #fffaf1; --ink: #1b2a2f; --muted: #66706f;
+  --line: #e3d6c2; --sun: #e2704a; --sun-ink: #fff; --glass: #a9cdc4; --olive: #4f6b52; --warn-bg: #fbecc9; --err: #b3261e;
+  --bg: var(--paper); --radius: 16px;
+  --serif: "Frank Ruhl Libre", "Times New Roman", serif; --sans: "Heebo", -apple-system, "Segoe UI", Arial, sans-serif;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+@media (prefers-color-scheme: dark) {
+  :root { --paper: #11252d; --card: #183641; --ink: #f1e9db; --muted: #a8b4b1; --line: #2b4953; --sun: #ee8a64; --sun-ink: #11252d;
+    --olive: #9fc0a2; --warn-bg: #3a3320; --err: #ff8a80; --sea: #0d1f26; --sea-2: #153440; }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 var(--sans); transition: background-color .5s var(--ease); }
+body.is-intro { background: var(--sea); }
+/* גרגר נייר סטטי, עדין מאוד */
+body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .07; mix-blend-mode: multiply; z-index: 50;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+body.is-intro::before { opacity: .12; mix-blend-mode: screen; }
+.app, .topbar { position: relative; z-index: 1; }
+.app { max-width: 520px; margin: 0 auto; padding: 8px 20px max(36px, env(safe-area-inset-bottom)); min-height: 100vh; min-height: 100svh; }
+.hp { position: absolute; top: 0; inset-inline-start: 0; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); opacity: 0; pointer-events: none; }
+[hidden] { display: none !important; }
+
+/* ---- סרגל עליון והתקדמות ---- */
+.topbar { max-width: 520px; margin: 0 auto; padding: max(14px, env(safe-area-inset-top)) 20px 6px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 10px 12px; }
+.mark { font-family: var(--serif); font-weight: 700; font-size: 1.15rem; letter-spacing: .01em; }
+.mark i { font-style: normal; color: var(--sun); padding: 0 .1em; }
+.count { color: var(--muted); font-size: .9rem; font-variant-numeric: tabular-nums; }
+.ticks { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.ticks b { height: 3px; border-radius: 3px; background: var(--line); transition: background-color .35s var(--ease), transform .35s var(--ease); transform-origin: right; }
+.ticks b.on { background: var(--sun); }
+.ticks b.now { transform: scaleY(1.8); }
+
+/* ---- טיפוגרפיה ---- */
+h1, h2 { font-family: var(--serif); font-weight: 800; letter-spacing: -.01em; margin: 0; }
+h1 { font-size: clamp(2.4rem, 11vw, 3.4rem); line-height: 1.05; }
+h2 { font-size: clamp(1.9rem, 8vw, 2.4rem); line-height: 1.12; margin: .5rem 0 .6rem; }
+h1:focus, h2:focus { outline: none; }
+.w { display: inline-block; }
+.js h1 .w, .js h2 .w { opacity: 0; transform: translateY(.5em); }
+.js .step.in h1 .w, .js .step.in h2 .w { opacity: 1; transform: none; transition: opacity .6s var(--ease), transform .7s var(--ease); transition-delay: calc(var(--i) * 70ms + 120ms); }
+.eyebrow { color: var(--sun); font-weight: 600; letter-spacing: .06em; margin: 0; font-size: .95rem; }
+.lead { font-size: 1.1rem; max-width: 34ch; }
+.small, .hint { color: var(--muted); font-size: .92rem; }
+
+/* ---- פתיחה ---- */
+.intro { position: relative; min-height: calc(100svh - 44px); display: flex; flex-direction: column; justify-content: center; padding: 6vh 0 4vh; color: #f6efe3; isolation: isolate; }
+.intro .lead { color: #d9e3df; }
+.intro .small { color: #9fb5b3; }
+.intro .fine { margin-top: 18px; }
+.bigdate { font-family: var(--serif); font-weight: 900; line-height: .82; color: var(--sun); display: flex; align-items: flex-end; gap: .04em; margin: .1em 0 .2em; direction: ltr; justify-content: flex-end; }
+.bigdate .d { font-size: clamp(8rem, 44vw, 13.5rem); letter-spacing: -.04em; }
+.bigdate .m { font-size: clamp(3.4rem, 18vw, 5.6rem); color: #f6efe3; padding-bottom: .1em; }
+.rings { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.rings i { position: absolute; inset-inline-start: -40%; top: 4%; width: 120vmin; max-width: 760px; aspect-ratio: 1; border: 1px solid rgba(169, 205, 196, .28); border-radius: 50%; }
+.rings i:nth-child(2) { transform: scale(.72); border-color: rgba(226, 112, 74, .35); }
+.rings i:nth-child(3) { transform: scale(.44); border-color: rgba(169, 205, 196, .2); }
+.js .intro .rings i { animation: ring 1.6s var(--ease) both; }
+.js .intro .rings i:nth-child(2) { animation-delay: .12s; --s: .72; }
+.js .intro .rings i:nth-child(3) { animation-delay: .24s; --s: .44; }
+@keyframes ring { from { opacity: 0; transform: scale(calc(var(--s, 1) * .8)); } to { opacity: 1; transform: scale(var(--s, 1)); } }
+.intro h1 { font-size: clamp(2.6rem, 12vw, 3.8rem); }
+.js .intro .eyebrow, .js .intro .bigdate, .js .intro .lead, .js .intro .actions, .js .intro .fine { opacity: 0; transform: translateY(14px); }
+.js .intro.in .eyebrow, .js .intro.in .bigdate, .js .intro.in .lead, .js .intro.in .actions, .js .intro.in .fine { opacity: 1; transform: none; transition: opacity .7s var(--ease), transform .8s var(--ease); }
+.js .intro.in .bigdate { transition-delay: .1s; } .js .intro.in .lead { transition-delay: .55s; } .js .intro.in .actions { transition-delay: .7s; } .js .intro.in .fine { transition-delay: .85s; }
+.intro .actions { position: static; background: none; padding: 0; margin-top: 26px; }
+
+/* ---- מעבר בין מסכים ---- */
+.step:not(.intro) { padding-top: 10px; }
+.step.in:not(.intro) > :not(h1):not(h2) { animation: rise .55s var(--ease) both; }
+body[data-dir="back"] .step.in:not(.intro) > :not(h1):not(h2) { animation-name: rise-back; }
+@keyframes rise { from { opacity: 0; transform: translateX(-18px); } to { opacity: 1; transform: none; } }
+@keyframes rise-back { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+
+.banner { background: var(--warn-bg); border-radius: var(--radius); padding: 10px 14px; margin: 8px 0 6px; font-size: .95rem; }
+
+/* ---- שדות ---- */
+.field { display: block; margin: 0 0 18px; }
+.field > span { display: block; font-weight: 600; margin-bottom: 6px; }
+.field em { font-weight: 400; font-style: normal; color: var(--muted); }
+input[type=text], input[type=tel], input[type=time], select, textarea {
+  width: 100%; font: inherit; color: inherit; background: var(--card); border: 1.5px solid var(--line);
+  border-radius: 14px; padding: 13px 15px; min-height: 52px; transition: border-color .2s, box-shadow .2s; }
+input:hover, select:hover, textarea:hover { border-color: color-mix(in srgb, var(--sun) 45%, var(--line)); }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-color: var(--sun); box-shadow: 0 0 0 4px color-mix(in srgb, var(--sun) 25%, transparent); }
+.btn:focus-visible, .card:focus-within, .chip:focus-within, a:focus-visible { outline: 3px solid color-mix(in srgb, var(--sun) 60%, transparent); outline-offset: 2px; }
+.err { display: block; color: var(--err); margin-top: 4px; font-size: .95rem; }
+.err:empty { display: none; }
+
+/* ---- כפתורים ---- */
+.actions { display: flex; gap: 10px; margin-top: 24px; position: sticky; bottom: 0; padding: 14px 0 max(6px, env(safe-area-inset-bottom)); background: linear-gradient(transparent, var(--bg) 32%); }
+.btn { font: inherit; font-weight: 700; border-radius: 999px; border: 1.5px solid transparent; padding: 14px 24px; min-height: 52px; cursor: pointer; transition: transform .15s var(--ease), background-color .2s, border-color .2s, opacity .2s; display: inline-flex; align-items: center; justify-content: center; gap: .5em; }
+.btn:active { transform: scale(.97); }
+.btn.primary { background: var(--sea); color: #f6efe3; flex: 1; }
+.btn.primary:hover { background: var(--sea-2); }
+.btn.primary.light { background: var(--sun); color: var(--sun-ink); flex: none; padding-inline: 30px; font-size: 1.08rem; }
+.btn.primary.light:hover { background: color-mix(in srgb, var(--sun) 88%, white); }
+.btn.primary span { display: inline-block; transition: transform .25s var(--ease); }
+.btn.primary:hover span { transform: translateX(-4px); }
+@media (prefers-color-scheme: dark) { .btn.primary { background: var(--sun); color: var(--sun-ink); } .btn.primary:hover { background: color-mix(in srgb, var(--sun) 88%, white); } }
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn.ghost:hover { border-color: var(--ink); }
+.btn.round { width: 52px; padding: 0; font-size: 1.5rem; line-height: 1; background: var(--card); border-color: var(--line); color: var(--ink); }
+.btn.round:hover { border-color: var(--sun); }
+.btn[disabled] { opacity: .55; cursor: wait; }
+
+/* ---- סטפרים, צ'יפים, כרטיסים ---- */
+.stepper-row { display: flex; align-items: center; justify-content: space-between; background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius); padding: 10px 16px; margin-bottom: 12px; font-weight: 600; }
+.stepper { direction: ltr; display: flex; align-items: center; gap: 14px; }
+.stepper output { min-width: 2ch; text-align: center; font: 800 1.9rem/1 var(--serif); font-variant-numeric: tabular-nums; }
+.chips { border: 0; padding: 0; margin: 0 0 6px; display: flex; flex-wrap: wrap; gap: 8px; }
+.chips legend { font-weight: 600; padding: 0; margin: 16px 0 8px; }
+.chip { position: relative; }
+.chip input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.chip span { display: block; padding: 11px 16px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--card); min-height: 46px; transition: background-color .2s, border-color .2s, color .2s, transform .15s var(--ease); }
+.chip:hover span { border-color: var(--sun); }
+.chip input:active + span { transform: scale(.96); }
+.chip input:checked + span { background: var(--sea); border-color: var(--sea); color: #f6efe3; font-weight: 700; }
+@media (prefers-color-scheme: dark) { .chip input:checked + span { background: var(--sun); border-color: var(--sun); color: var(--sun-ink); } }
+.chip input:disabled + span { opacity: .35; }
+.chip input:disabled { cursor: not-allowed; }
+.nights { color: var(--olive); font: 700 1.15rem var(--serif); min-height: 1.6em; }
+.cards { display: grid; gap: 10px; margin-bottom: 8px; }
+.card { display: flex; gap: 14px; align-items: flex-start; background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius); padding: 16px; cursor: pointer; transition: border-color .2s, box-shadow .2s, transform .15s var(--ease); }
+.card:hover { border-color: color-mix(in srgb, var(--sun) 55%, var(--line)); }
+.card:active { transform: scale(.99); }
+.card input { margin-top: 5px; accent-color: var(--sun); width: 20px; height: 20px; flex: none; }
+.card b { display: block; font-size: 1.05rem; }
+.card small { display: block; color: var(--muted); margin-top: 2px; font-size: .92rem; }
+.card:has(input:checked) { border-color: var(--sun); box-shadow: 0 0 0 1.5px var(--sun) inset, 0 8px 24px -14px var(--sun); }
+.lodge { flex-direction: column; cursor: default; }
+.lodge .row { display: flex; gap: 14px; align-items: flex-start; width: 100%; cursor: pointer; }
+.lodge .price, .lodge .code { display: inline-block; margin-top: 8px; margin-inline-end: 8px; background: color-mix(in srgb, var(--glass) 35%, transparent); border-radius: 8px; padding: 2px 10px; font-size: .92rem; }
+.lodge a.book { align-self: flex-start; color: var(--sun); font-weight: 700; margin-inline-start: 34px; padding: 6px 0; text-underline-offset: 4px; }
+.warn { background: var(--warn-bg); border-radius: var(--radius); padding: 12px 16px; }
+
+/* ---- סיום ---- */
+.done-head { padding-top: 5vh; }
+.check { width: 64px; height: 64px; fill: none; stroke: var(--sun); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.check circle { stroke-dasharray: 151; stroke-dashoffset: 151; }
+.check path { stroke-dasharray: 40; stroke-dashoffset: 40; }
+.js .step.in .check circle { animation: draw .8s var(--ease) .1s forwards; }
+.js .step.in .check path { animation: draw .5s var(--ease) .7s forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.summary { background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius); padding: 6px 18px; margin: 20px 0; }
+.summary div { padding: 10px 0; border-bottom: 1px solid var(--line); }
+.summary div:last-child { border-bottom: 0; }
+.summary dt { color: var(--muted); font-size: .85rem; }
+.summary dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+
+/* ---- שולחן עבודה: אותה עמודה, ממורכזת ---- */
+@media (min-width: 700px) { .app { padding-inline: 8px; } .intro { min-height: calc(100vh - 44px); } }
+
+/* ---- תנועה מופחתת: מצבים סופיים מיד ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .js h1 .w, .js h2 .w, .js .intro .eyebrow, .js .intro .bigdate, .js .intro .lead, .js .intro .actions, .js .intro .fine { opacity: 1 !important; transform: none !important; }
+  .check circle, .check path { stroke-dashoffset: 0; }
+}
